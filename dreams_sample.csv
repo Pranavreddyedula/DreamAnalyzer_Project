@@ -1,0 +1,6 @@
+dream_id,user_id,dream_text,timestamp,emotion_labels,stress_label,motifs
+1,101,"I was falling in water",2025-01-10,"fear","high","falling,water"
+2,102,"I was flying over mountains",2025-01-12,"joy","low","flying"
+3,103,"Exam hall without preparation",2025-02-01,"fear","high","exam"
+4,101,"My teeth were loose",2025-02-05,"fear","medium","teeth"
+5,104,"Someone was chasing me",2025-02-15,"panic","high","chase"
