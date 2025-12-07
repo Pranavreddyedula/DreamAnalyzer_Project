@@ -1,0 +1,6 @@
+dream_id,dream_text,emotion_labels,stress_label
+1,"I was falling from a tall building and could not breathe","fear;anxiety","high"
+2,"I was flying happily over a city with my friends","joy;surprise","low"
+3,"I was in an exam hall and forgot everything","fear;anxiety","high"
+4,"My teeth were falling out suddenly","fear;embarrassment","medium"
+5,"I was drowning in deep ocean","fear;panic","high"
