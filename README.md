@@ -56,17 +56,11 @@ Copy code
 ---
 
 ## 🖥️ Screenshots
+<img width="707" height="429" alt="Screenshot 2025-12-07 113832" src="https://github.com/user-attachments/assets/06050770-cf2a-4ccf-abf6-7366375ffa9d" />
+<img width="703" height="416" alt="Screenshot 2025-12-07 113853" src="https://github.com/user-attachments/assets/4ee83206-551b-4eb5-8e63-74d13c4df2b4" />
+<img width="1656" height="820" alt="Screenshot 2025-12-07 114001" src="https://github.com/user-attachments/assets/b8a3a9db-040a-4e6f-a04e-8ff2388e02de" />
 
-| UI | Output |
-|----|--------|
-| ![UI Screenshot](documentation/ui.png) | ![Output Screenshot](documentation/output.png) |
-
-(You can replace these with your actual screenshots)
-
----
-
-## 🛠️ Tech Stack
-
+## 🛠️ Tech Stack![Uploading Screenshot 2025-12-07 114001.png…]()
 | Category | Technology |
 |---------|------------|
 | Backend | Python Flask |
