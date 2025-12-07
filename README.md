@@ -1,13 +1,4 @@
 # DreamAnalyzer_Project
-ChatGPT said:
-
-Absolutely! 🔥
-Here is a professional and clean README.md for your GitHub repository.
-You can copy-paste this directly into a file named:
-
-📄 README.md
-inside your DreamAnalyzer_Project GitHub repo.
-
 🧠 AI-Based Dream Analyzer using NLP & Deep Learning
 🌙 Understand Your Dreams with AI | Final Year B.Tech Project (CSE)
 📌 Project Overview
