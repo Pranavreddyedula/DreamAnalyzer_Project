@@ -1,22 +1,16 @@
 from flask import Flask, request, jsonify, render_template
-import torch
-import joblib
-from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
+import nltk
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import utils, stress
 
-app = Flask(__name__)
-
-# Try loading model
+# Ensure VADER lexicon is available
 try:
-    model = DistilBertForSequenceClassification.from_pretrained('dream_emotion_model')
-    mlb = joblib.load('label_encoder.joblib')
-    print("Model Loaded Successfully")
+    nltk.data.find("sentiment/vader_lexicon")
 except:
-    model = None
-    mlb = None
-    print("Model not found! Using default output")
+    nltk.download("vader_lexicon")
 
-tokenizer = DistilBertTokenizerFast.from_pretrained("distilbert-base-uncased")
+app = Flask(__name__)
+sid = SentimentIntensityAnalyzer()
 motifs = utils.load_motifs("motifs.csv")
 
 @app.route("/")
@@ -25,38 +19,49 @@ def home():
 
 @app.route("/analyze", methods=["POST"])
 def analyze():
-    text = request.json.get("text", "")
+    data = request.json or {}
+    text = data.get("text", "")
+
+    if not text.strip():
+        return jsonify({"error": "Empty text"}), 400
 
     cleaned = utils.clean_text(text)
     motifs_found = utils.extract_motifs(text, motifs)
 
-    # Emotion Prediction
+    scores = sid.polarity_scores(text)
+    neg = scores["neg"]
+    pos = scores["pos"]
+    neu = scores["neu"]
+
     emotions = []
-    if model and mlb:
-        inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True, max_length=128)
-        with torch.no_grad():
-            logits = model(**inputs).logits
-        probs = torch.sigmoid(logits).numpy()[0]
-        for i, p in enumerate(probs):
-            if p >= 0.4:
-                emotions.append({"label": mlb.classes_[i], "score": float(p)})
-    else:
-        emotions.append({"label": "fear", "score": 0.82})
+    if neg > 0.3:
+        emotions.append({"label": "fear/anxiety", "score": float(neg)})
+    if pos > 0.3:
+        emotions.append({"label": "joy/positive", "score": float(pos)})
+    if neu >= 0.5 and not emotions:
+        emotions.append({"label": "neutral", "score": float(neu)})
+    if not emotions:
+        emotions.append({"label": "uncertain", "score": float(neu)})
 
     stress_value = stress.stress_score(text, motifs_found)
 
-    result_report = []
+    interpretation = []
     if "falling" in motifs_found:
-        result_report.append("Fear of losing control")
+        interpretation.append("Loss of control or fear of failure.")
+    if "exam" in motifs_found:
+        interpretation.append("High performance stress.")
     if stress_value > 60:
-        result_report.append("High Stress — Try Relaxation")
+        interpretation.append("High stress indicators detected.")
+    if not interpretation:
+        interpretation.append("Dream appears normal with no strong signals.")
 
     return jsonify({
         "cleaned": cleaned,
         "motifs": motifs_found,
+        "sentiment_scores": scores,
         "emotions": emotions,
         "stress": stress_value,
-        "report": result_report
+        "report": interpretation
     })
 
 if __name__ == "__main__":
