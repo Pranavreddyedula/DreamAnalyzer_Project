@@ -11,9 +11,18 @@ sid = SentimentIntensityAnalyzer()
 def stress_score(text, motifs_found):
     s = sid.polarity_scores(text)
     neg = s["neg"]
-    score = neg * 100
+    score = neg * 100  # base using negative sentiment
 
-    stress_motifs = {"exam": 15, "chase": 20, "falling": 18, "drowning": 25}
+    # Updated weights for more accurate stress detection
+    stress_motifs = {
+        "exam": 20,
+        "chase": 25,
+        "falling": 18,
+        "drowning": 30,
+        "dark": 10,
+        "monster": 15
+    }
+
     for m in motifs_found:
         score += stress_motifs.get(m, 0)
 
