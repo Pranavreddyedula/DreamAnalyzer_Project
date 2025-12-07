@@ -33,12 +33,13 @@ def analyze():
     pos = scores["pos"]
     neu = scores["neu"]
 
-    emotions = []
-    if neg > 0.3:
-        emotions.append({"label": "fear/anxiety", "score": float(neg)})
-    if pos > 0.3:
+       emotions = []
+    # more sensitive logic to detect fear/anxiety
+    if neg >= 0.1 or scores["compound"] < 0:
+        emotions.append({"label": "fear/anxiety", "score": float(max(neg, 0.4))})
+    if pos >= 0.3:
         emotions.append({"label": "joy/positive", "score": float(pos)})
-    if neu >= 0.5 and not emotions:
+    if not emotions and neu >= 0.5:
         emotions.append({"label": "neutral", "score": float(neu)})
     if not emotions:
         emotions.append({"label": "uncertain", "score": float(neu)})
